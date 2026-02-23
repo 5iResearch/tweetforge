@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TweetForge — AI Tweet Writer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f3ee;
+  --surface: #ffffff;
+  --surface2: #edeae3;
+  --border: #d8d4cb;
+  --accent: #1a1a2e;
+  --accent2: #e8401c;
+  --text: #1a1a2e;
+  --muted: #7a7568;
+  --success: #2d6a4f;
+  --radius: 12px;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  min-height: 100vh;
+  font-size: 15px;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 58px 1fr;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  grid-column: 1 / -1;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 2px solid var(--accent2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--accent2); }
+
+.handle-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.handle-field label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+.handle-field input {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  color: #fff;
+  outline: none;
+  width: 140px;
+  transition: border-color 0.15s;
+}
+.handle-field input::placeholder { color: rgba(255,255,255,0.3); }
+.handle-field input:focus { border-color: var(--accent2); }
+
+/* Sidebar */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  overflow-y: auto;
+  height: calc(100vh - 58px);
+  position: sticky;
+  top: 58px;
+}
+
+/* Main */
+.main {
+  padding: 26px;
+  overflow-y: auto;
+  height: calc(100vh - 58px);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Section label */
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.section-label .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent2);
+  flex-shrink: 0;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  resize: vertical;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+  outline: none;
+}
+textarea:focus { border-color: var(--accent); }
+textarea::placeholder { color: var(--muted); }
+
+/* Voice pill */
+.voice-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: var(--surface2);
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.voice-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.voice-dot.active { background: var(--success); box-shadow: 0 0 6px rgba(45,106,79,0.4); }
+
+/* Tone chips */
+.tone-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.tone-chip {
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Instrument Sans', sans-serif;
+}
+.tone-chip.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+
+/* Options */
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.option-row input[type="checkbox"] { accent-color: var(--accent2); cursor: pointer; }
+
+/* Count selector */
+.count-row { display: flex; gap: 5px; }
+.count-btn {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+.count-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* Generate button */
+.generate-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent2);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.generate-btn:hover:not(:disabled) { background: #c9350f; transform: translateY(-1px); }
+.generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.generate-btn .spinner {
+  display: none;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto;
+}
+.generate-btn.loading .btn-text { display: none; }
+.generate-btn.loading .spinner { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Content card */
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* Tabs */
+.tab-group {
+  display: flex;
+  gap: 2px;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 16px;
+}
+.tab {
+  flex: 1;
+  padding: 7px 6px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  white-space: nowrap;
+}
+.tab.active { background: var(--accent); color: #fff; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.char-hint { font-size: 11px; color: var(--muted); text-align: right; margin-top: 5px; }
+
+/* Drop zone */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface2);
+}
+.drop-zone:hover, .drop-zone.dragover { border-color: var(--accent2); background: #fdf0ec; }
+.drop-zone input[type="file"] { display: none; }
+.drop-icon { font-size: 30px; margin-bottom: 8px; }
+.drop-label { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.drop-label strong { color: var(--accent2); }
+
+/* URL row */
+.url-row { display: flex; gap: 8px; }
+.url-input {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+.url-input:focus { border-color: var(--accent); }
+.url-btn {
+  padding: 12px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.url-btn:hover { background: #2d2d4a; }
+
+/* Output */
+.tweets-section { display: flex; flex-direction: column; gap: 16px; }
+
+.tweets-header { display: flex; align-items: center; justify-content: space-between; }
+.tweets-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+.regen-btn {
+  padding: 6px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--accent2);
+  background: transparent;
+  color: var(--accent2);
+  font-size: 12px;
+  font-family: 'Instrument Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.regen-btn:hover { background: var(--accent2); color: #fff; }
+
+/* Tweet card */
+.tweet-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: box-shadow 0.2s;
+  animation: slideIn 0.3s ease forwards;
+  opacity: 0;
+}
+.tweet-card:nth-child(2) { animation-delay: 0.08s; }
+.tweet-card:nth-child(3) { animation-delay: 0.16s; }
+.tweet-card:nth-child(4) { animation-delay: 0.24s; }
+.tweet-card:nth-child(5) { animation-delay: 0.32s; }
+.tweet-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tweet-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.tweet-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 13px;
+  color: #fff; flex-shrink: 0;
+}
+.tweet-author { font-weight: 600; font-size: 14px; line-height: 1.2; }
+.tweet-handle { font-size: 12.5px; color: var(--muted); }
+.variant-badge {
+  margin-left: auto;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--surface2); color: var(--muted);
+}
+
+.tweet-body {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  outline: none;
+  border-radius: 4px;
+  transition: outline 0.1s;
+  min-height: 24px;
+}
+.tweet-body[contenteditable="true"]:hover { outline: 1px solid var(--border); padding: 4px; margin: -4px; }
+.tweet-body[contenteditable="true"]:focus { outline: 1px solid var(--accent); padding: 4px; margin: -4px; }
+
+.tweet-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.tweet-char-count { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+.tweet-char-count.ok   { color: var(--success); }
+.tweet-char-count.near { color: #d97706; }
+.tweet-char-count.over { color: var(--accent2); }
+
+.tweet-actions { display: flex; gap: 6px; }
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 12px;
+  font-family: 'Instrument Sans', sans-serif;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 5px;
+}
+.action-btn:hover { background: var(--surface2); color: var(--text); }
+.action-btn.copy-success { background: #d1fae5; border-color: #6ee7b7; color: var(--success); }
+.action-btn.post-btn { background: var(--accent); border-color: var(--accent); color: #fff; }
+.action-btn.post-btn:hover { background: #2d2d4a; }
+
+/* Thread section inside card */
+.thread-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.thread-tweet {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.thread-tweet-footer {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* Empty state */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state .big-icon { font-size: 44px; margin-bottom: 14px; }
+.empty-state h3 { font-family: 'Syne', sans-serif; font-size: 17px; margin-bottom: 8px; color: var(--text); }
+.empty-state p { font-size: 13.5px; line-height: 1.6; }
+.empty-state .arrow { font-size: 22px; margin-bottom: 10px; display: block; }
+
+/* Skeleton */
+.skeleton-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+.skel { height: 13px; background: var(--surface2); border-radius: 4px; margin-bottom: 10px; }
+.skel.short { width: 38%; }
+.skel.med   { width: 72%; }
+.skel.full  { width: 100%; }
+
+/* Voice tweet items */
+.voice-tweet-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  animation: slideIn 0.2s ease forwards;
+}
+.voice-tweet-text {
+  flex: 1;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.voice-tweet-del {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.voice-tweet-del:hover { color: var(--accent2); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { height: auto; position: static; }
+  .main { height: auto; }
+  .handle-field { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Tweet<span>Forge</span></div>
+    <div class="handle-field">
+      <label for="handleInput">Your Handle</label>
+      <input type="text" id="handleInput" placeholder="@yourhandle" maxlength="30" oninput="updateHandles()">
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div>
+      <div class="section-label"><span class="dot"></span>Your Voice
+        <span id="voiceSavedBadge" style="margin-left:auto;font-size:10px;color:var(--success);display:none;">✓ Saved</span>
+      </div>
+      <div class="voice-pill">
+        <div class="voice-dot" id="voiceDot"></div>
+        <span id="voiceStatusText">Add your past tweets below</span>
+      </div>
+
+      <!-- Saved tweet list -->
+      <div id="voiceTweetList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+
+      <!-- Add tweet row -->
+      <div style="display:flex;gap:6px;">
+        <textarea
+          id="newTweetInput"
+          rows="2"
+          placeholder="Paste a past tweet here, then click +"
+          style="font-size:12.5px;flex:1;resize:none;border-radius:8px;"
+        ></textarea>
+        <button onclick="addVoiceTweet()" style="
+          flex-shrink:0;width:34px;height:34px;align-self:flex-end;
+          background:var(--accent2);color:#fff;border:none;border-radius:8px;
+          font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+          line-height:1;transition:background 0.15s;"
+          onmouseover="this.style.background='#c9350f'"
+          onmouseout="this.style.background='var(--accent2)'"
+          title="Add tweet">+</button>
+      </div>
+      <div class="char-hint" id="tweetCountHint" style="margin-top:4px;">0 tweets saved</div>
+    </div>
+
+    <div>
+      <div class="section-label"><span class="dot"></span>Tone</div>
+      <div class="tone-chips">
+        <button class="tone-chip active" data-tone="Analytical & data-driven">Analytical</button>
+        <button class="tone-chip" data-tone="Conversational & direct">Conversational</button>
+        <button class="tone-chip" data-tone="Bold & punchy">Bold</button>
+        <button class="tone-chip" data-tone="Educational & clear">Educational</button>
+        <button class="tone-chip" data-tone="Contrarian & thought-provoking">Contrarian</button>
+        <button class="tone-chip" data-tone="Storytelling & narrative">Story</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label"><span class="dot"></span>Variations</div>
+      <div class="count-row">
+        <button class="count-btn active" data-count="1">1</button>
+        <button class="count-btn" data-count="3">3</button>
+        <button class="count-btn" data-count="5">5</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label"><span class="dot"></span>Options</div>
+      <label class="option-row"><input type="checkbox" id="includeHashtags" checked> Include hashtags</label>
+      <label class="option-row"><input type="checkbox" id="includeEmoji" checked> Include emoji</label>
+      <label class="option-row"><input type="checkbox" id="includeThread"> Also write a thread version</label>
+    </div>
+
+    <button class="generate-btn" id="generateBtn" onclick="generateTweets()">
+      <span class="btn-text">⚡ Generate Tweet</span>
+      <div class="spinner"></div>
+    </button>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <div class="content-card">
+      <div class="section-label" style="margin-bottom:14px;"><span class="dot"></span>Content to Tweet</div>
+      <div class="tab-group">
+        <button class="tab active" onclick="switchTab('paste', this)">✍️ Paste Article</button>
+        <button class="tab" onclick="switchTab('url', this)">🔗 URL</button>
+        <button class="tab" onclick="switchTab('image', this)">📊 Image / Graph</button>
+      </div>
+
+      <!-- Paste -->
+      <div class="tab-content active" id="tab-paste">
+        <textarea id="pasteContent" rows="9" placeholder="Paste your article, blog post, research note, or any text here. TweetForge will pull out the strongest insight and write it in your voice..."></textarea>
+        <div class="char-hint" id="pasteCharHint">0 characters</div>
+      </div>
+
+      <!-- URL -->
+      <div class="tab-content" id="tab-url">
+        <div class="url-row">
+          <input type="url" class="url-input" id="urlInput" placeholder="https://example.com/your-article">
+          <button class="url-btn" onclick="queueUrl()">Use URL</button>
+        </div>
+        <p style="margin-top:10px; font-size:12px; color:var(--muted); line-height:1.5;">The URL is passed as context to the AI. For best results, paste a key excerpt or summary below too.</p>
+        <textarea id="urlContext" rows="4" placeholder="Optional: paste a key excerpt or summary from the article..." style="margin-top:10px; font-size:13px;"></textarea>
+        <div class="char-hint" id="urlStatus"></div>
+      </div>
+
+      <!-- Image -->
+      <div class="tab-content" id="tab-image">
+        <div class="drop-zone" id="imgDropZone" onclick="document.getElementById('imageInput').click()">
+          <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(this)">
+          <div class="drop-icon">📊</div>
+          <div class="drop-label">Drop a chart, graph, or screenshot here<br>or <strong>click to browse</strong> — PNG, JPG, WEBP</div>
+        </div>
+        <div id="imagePreviewWrap" style="margin-top:12px; display:none;">
+          <img id="imagePreview" style="max-width:100%; max-height:180px; border-radius:8px; border:1px solid var(--border);">
+          <div style="margin-top:6px; font-size:12px; color:var(--success);">✓ Image ready — AI will read it visually</div>
+        </div>
+        <textarea id="imageContext" rows="3" placeholder="Optional: describe what this chart shows, add key numbers, or give context the AI should know..." style="margin-top:12px; font-size:13px;"></textarea>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="tweets-section" id="tweetsSection">
+      <div class="empty-state">
+        <span class="arrow">←</span>
+        <div class="big-icon">🐦</div>
+        <h3>Ready when you are</h3>
+        <p>Paste an article, drop a URL, or upload a chart.<br>Train your voice with past tweets, then hit <strong>Generate</strong>.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── State ───────────────────────────────────────────────
+let selectedTone  = 'Analytical & data-driven';
+let selectedCount = 1;
+let activeTab     = 'paste';
+let uploadedImageBase64 = null;
+let queuedUrl = '';
+let voiceTweets = [];   // persisted array of tweet strings
+
+// ── Persistent storage helpers ───────────────────────────
+async function saveVoiceTweets() {
+  try {
+    await window.storage.set('tweetforge-voice', JSON.stringify(voiceTweets));
+    flashSaved();
+  } catch(e) { console.warn('Storage save failed', e); }
+}
+
+async function saveHandle(val) {
+  try { await window.storage.set('tweetforge-handle', val); } catch(e) {}
+}
+
+async function loadPersistedData() {
+  // Load voice tweets
+  try {
+    const res = await window.storage.get('tweetforge-voice');
+    if (res && res.value) {
+      voiceTweets = JSON.parse(res.value);
+      renderVoiceList();
+      updateVoiceStatus();
+    }
+  } catch(e) { /* first visit */ }
+
+  // Load handle
+  try {
+    const res = await window.storage.get('tweetforge-handle');
+    if (res && res.value) {
+      document.getElementById('handleInput').value = res.value;
+      updateHandles();
+    }
+  } catch(e) {}
+}
+
+function flashSaved() {
+  const badge = document.getElementById('voiceSavedBadge');
+  badge.style.display = 'inline';
+  setTimeout(() => badge.style.display = 'none', 2000);
+}
+
+// ── Voice tweet list management ──────────────────────────
+function renderVoiceList() {
+  const list = document.getElementById('voiceTweetList');
+  list.innerHTML = '';
+  voiceTweets.forEach((tw, i) => {
+    const item = document.createElement('div');
+    item.className = 'voice-tweet-item';
+    item.innerHTML = `
+      <div class="voice-tweet-text">${escHtml(tw)}</div>
+      <button class="voice-tweet-del" onclick="deleteVoiceTweet(${i})" title="Remove">×</button>`;
+    list.appendChild(item);
+  });
+}
+
+function updateVoiceStatus() {
+  const n      = voiceTweets.length;
+  const dot    = document.getElementById('voiceDot');
+  const status = document.getElementById('voiceStatusText');
+  const hint   = document.getElementById('tweetCountHint');
+  hint.textContent = `${n} tweet${n !== 1 ? 's' : ''} saved`;
+  if (n >= 5) {
+    dot.classList.add('active');
+    status.textContent = `Voice trained · ${n} tweets ✓`;
+  } else if (n > 0) {
+    dot.classList.remove('active');
+    status.textContent = `Add ${5 - n} more for best voice matching`;
+  } else {
+    dot.classList.remove('active');
+    status.textContent = 'Add your past tweets below';
+  }
+}
+
+function addVoiceTweet() {
+  const input = document.getElementById('newTweetInput');
+  const text  = input.value.trim();
+  if (!text || text.length < 5) return;
+  voiceTweets.push(text);
+  input.value = '';
+  renderVoiceList();
+  updateVoiceStatus();
+  saveVoiceTweets();
+}
+
+function deleteVoiceTweet(i) {
+  voiceTweets.splice(i, 1);
+  renderVoiceList();
+  updateVoiceStatus();
+  saveVoiceTweets();
+}
+
+// Allow Enter (without shift) in the new tweet input to add
+document.getElementById('newTweetInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addVoiceTweet(); }
+});
+
+// ── Handle ──────────────────────────────────────────────
+function updateHandles() {
+  const val    = document.getElementById('handleInput').value.trim();
+  const handle = val ? (val.startsWith('@') ? val : '@' + val) : '@you';
+  const name   = handle.replace('@','') || 'You';
+  const init   = name.slice(0,2).toUpperCase();
+  document.querySelectorAll('.tweet-handle').forEach(el => el.textContent = handle);
+  document.querySelectorAll('.tweet-author').forEach(el => el.textContent = name);
+  document.querySelectorAll('.tweet-avatar').forEach(el => el.textContent = init);
+  saveHandle(document.getElementById('handleInput').value.trim());
+}
+
+// Paste char count
+document.getElementById('pasteContent').addEventListener('input', function() {
+  document.getElementById('pasteCharHint').textContent = `${this.value.length.toLocaleString()} characters`;
+});
+
+// ── Load on startup ──────────────────────────────────────
+loadPersistedData();
+
+// ── Tab switching ────────────────────────────────────────
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-group .tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  const labels = { paste: '⚡ Generate Tweet', url: '⚡ Generate Tweet', image: '⚡ Generate from Image' };
+  document.querySelector('.generate-btn .btn-text').textContent = labels[tab];
+}
+
+// ── Tone ─────────────────────────────────────────────────
+document.querySelectorAll('.tone-chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tone-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedTone = btn.dataset.tone;
+  });
+});
+
+// ── Count ────────────────────────────────────────────────
+document.querySelectorAll('.count-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedCount = parseInt(btn.dataset.count);
+    const lbl = document.querySelector('.generate-btn .btn-text');
+    lbl.textContent = selectedCount === 1 ? '⚡ Generate Tweet' : `⚡ Generate ${selectedCount} Tweets`;
+  });
+});
+
+// ── URL ──────────────────────────────────────────────────
+function queueUrl() {
+  const val = document.getElementById('urlInput').value.trim();
+  if (!val) return;
+  queuedUrl = val;
+  document.getElementById('urlStatus').textContent = `✓ URL ready`;
+}
+
+// ── Image ────────────────────────────────────────────────
+function handleImageUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    uploadedImageBase64 = e.target.result;
+    document.getElementById('imagePreview').src = uploadedImageBase64;
+    document.getElementById('imagePreviewWrap').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+const imgZone = document.getElementById('imgDropZone');
+imgZone.addEventListener('dragover', e => { e.preventDefault(); imgZone.classList.add('dragover'); });
+imgZone.addEventListener('dragleave', () => imgZone.classList.remove('dragover'));
+imgZone.addEventListener('drop', e => {
+  e.preventDefault(); imgZone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const inp = document.getElementById('imageInput');
+  const dt = new DataTransfer(); dt.items.add(file); inp.files = dt.files;
+  handleImageUpload(inp);
+});
+
+// ── Get content string ───────────────────────────────────
+function getContent() {
+  if (activeTab === 'paste') {
+    return document.getElementById('pasteContent').value.trim();
+  } else if (activeTab === 'url') {
+    const ctx = document.getElementById('urlContext').value.trim();
+    const parts = [];
+    if (queuedUrl) parts.push(`Source article URL: ${queuedUrl}`);
+    if (ctx) parts.push(ctx);
+    return parts.join('\n\n');
+  } else if (activeTab === 'image') {
+    const ctx = document.getElementById('imageContext').value.trim();
+    return ctx || 'An image/chart was provided — analyse it and tweet the key insight.';
+  }
+  return '';
+}
+
+// ── Build prompt ─────────────────────────────────────────
+function buildPrompt(content) {
+  const hasHashtags = document.getElementById('includeHashtags').checked;
+  const hasEmoji    = document.getElementById('includeEmoji').checked;
+  const wantsThread = document.getElementById('includeThread').checked;
+  const n = selectedCount;
+
+  const voiceBlock = voiceTweets.length > 0
+    ? `\n\n━━ VOICE REFERENCE — PAST TWEETS ━━\nStudy these carefully. Your output must mirror this person's:\n• Sentence length & rhythm\n• Vocabulary & word choice\n• Punctuation habits (do they use em-dashes? ellipses? all-caps?)\n• How they reference numbers & data\n• Their signature phrases or hooks\nWrite as if you ARE this person.\n\n${voiceTweets.join('\n')}\n━━ END VOICE REFERENCE ━━`
+    : '';
+
+  const threadNote = wantsThread
+    ? '\n\nIf selectedCount is 1, also include a "thread" field: an array of 3 tweet strings (each under 280 chars, starting with 1/, 2/, 3/).'
+    : '';
+
+  const jsonShape = n === 1
+    ? `{"variant":1,"tweet":"..."}${wantsThread ? ' (add "thread":["1/ ...","2/ ...","3/ ..."] field)' : ''}`
+    : `[{"variant":1,"tweet":"..."},{"variant":2,"tweet":"..."}]`;
+
+  return `You are an expert social media ghostwriter specialising in finance and investing.
+
+Generate exactly ${n} distinct, high-quality tweet${n > 1 ? ' variation' + 's' : ''} from the content below.${n > 1 ? ' Each must take a different angle, hook, or emphasis.' : ' Pick the single strongest, most engaging angle.'}${voiceBlock}
+
+RULES (non-negotiable):
+• Tone: ${selectedTone}
+• ${hasHashtags ? 'Include 1–3 relevant hashtags naturally.' : 'No hashtags.'}
+• ${hasEmoji ? 'Emoji allowed — use sparingly, only where genuinely impactful.' : 'No emoji.'}
+• Every tweet ≤ 280 characters.
+• Lead with the most surprising or insightful element.
+• Sound like a real person, not a press release. No filler like "Game-changer" or "Exciting news".
+• If the content has a specific stat or number, try to lead with it.${threadNote}
+
+CONTENT:
+"""
+${content}
+"""
+
+Return ONLY valid JSON — no markdown fences, no commentary:
+${jsonShape}`;
+}
+
+// ── Generate ─────────────────────────────────────────────
+async function generateTweets() {
+  const content  = getContent();
+  const hasImage = activeTab === 'image' && uploadedImageBase64;
+
+  if (!content && !hasImage) {
+    const btn = document.getElementById('generateBtn');
+    btn.style.animation = 'none';
+    btn.offsetHeight;
+    btn.style.animation = 'shake 0.35s ease';
+    setTimeout(() => btn.style.animation = '', 400);
+    return;
+  }
+
+  const btn = document.getElementById('generateBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  showSkeletons(selectedCount);
+
+  const prompt = buildPrompt(content);
+
+  try {
+    let messages;
+    if (hasImage) {
+      const b64  = uploadedImageBase64.split(',')[1];
+      const mime = uploadedImageBase64.split(';')[0].split(':')[1];
+      messages = [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
+        { type: 'text',  text: prompt }
+      ]}];
+    } else {
+      messages = [{ role: 'user', content: prompt }];
+    }
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1400, messages })
+    });
+
+    const data   = await resp.json();
+    const raw    = data.content?.map(b => b.text || '').join('') || '';
+    const clean  = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    const tweets = Array.isArray(parsed) ? parsed : [parsed];
+    renderTweets(tweets);
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('tweetsSection').innerHTML = `
+      <div class="empty-state">
+        <div class="big-icon">⚠️</div>
+        <h3>Something went wrong</h3>
+        <p>Could not generate tweets — check your content and try again.<br>
+        <small style="opacity:0.5;font-size:11px">${err.message}</small></p>
+      </div>`;
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+// ── Skeletons ────────────────────────────────────────────
+function showSkeletons(n) {
+  const s = document.getElementById('tweetsSection');
+  s.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    s.innerHTML += `
+      <div class="skeleton-card">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--surface2);flex-shrink:0;"></div>
+          <div style="flex:1"><div class="skel short"></div><div class="skel" style="width:28%;height:10px;"></div></div>
+        </div>
+        <div class="skel full"></div><div class="skel med"></div><div class="skel short"></div>
+      </div>`;
+  }
+}
+
+// ── Render tweets ────────────────────────────────────────
+function renderTweets(tweets) {
+  const section = document.getElementById('tweetsSection');
+  const val     = document.getElementById('handleInput').value.trim();
+  const handle  = val ? (val.startsWith('@') ? val : '@' + val) : '@you';
+  const name    = handle.replace('@','') || 'You';
+  const init    = name.slice(0,2).toUpperCase();
+
+  section.innerHTML = `
+    <div class="tweets-header">
+      <div class="tweets-title">${tweets.length === 1 ? 'Your Tweet' : `${tweets.length} Variations`}</div>
+      <button class="regen-btn" onclick="generateTweets()">↻ Regenerate</button>
+    </div>`;
+
+  tweets.forEach((t, i) => {
+    const tweetText = t.tweet || '';
+    const cnt    = tweetText.length;
+    const cClass = cnt > 280 ? 'over' : cnt > 240 ? 'near' : 'ok';
+    const cLabel = cnt > 280 ? `${cnt}/280 ⚠️ Too long` : `${cnt}/280`;
+
+    const card = document.createElement('div');
+    card.className = 'tweet-card';
+
+    let threadHTML = '';
+    if (t.thread && Array.isArray(t.thread)) {
+      const items = t.thread.map(tw => `
+        <div class="thread-tweet">
+          ${escHtml(tw)}
+          <div class="thread-tweet-footer">${tw.length}/280</div>
+        </div>`).join('');
+      threadHTML = `
+        <div class="thread-section">
+          <div class="section-label" style="margin-bottom:10px;"><span class="dot"></span>Thread Version</div>
+          ${items}
+        </div>`;
+    }
+
+    card.innerHTML = `
+      <div class="tweet-meta">
+        <div class="tweet-avatar">${init}</div>
+        <div>
+          <div class="tweet-author">${name}</div>
+          <div class="tweet-handle">${handle}</div>
+        </div>
+        ${tweets.length > 1 ? `<div class="variant-badge">Variant ${i + 1}</div>` : ''}
+      </div>
+      <div class="tweet-body" contenteditable="true" id="body-${i}" oninput="recount(${i})">${escHtml(tweetText)}</div>
+      <div class="tweet-footer">
+        <div class="tweet-char-count ${cClass}" id="cnt-${i}">${cLabel}</div>
+        <div class="tweet-actions">
+          <button class="action-btn" onclick="regenOne(${i})">↻ New version</button>
+          <button class="action-btn" onclick="copyTweet(${i}, this)">📋 Copy</button>
+          <button class="action-btn post-btn" onclick="postTweet(${i})">Post ↗</button>
+        </div>
+      </div>
+      ${threadHTML}`;
+
+    section.appendChild(card);
+  });
+}
+
+// ── Helpers ──────────────────────────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function recount(i) {
+  const body = document.getElementById('body-' + i);
+  const el   = document.getElementById('cnt-'  + i);
+  const n    = body.innerText.length;
+  el.className  = 'tweet-char-count ' + (n > 280 ? 'over' : n > 240 ? 'near' : 'ok');
+  el.textContent = n > 280 ? `${n}/280 ⚠️ Too long` : `${n}/280`;
+}
+
+function copyTweet(i, btn) {
+  navigator.clipboard.writeText(document.getElementById('body-' + i).innerText).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copy-success');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copy-success'); }, 1800);
+  });
+}
+
+function postTweet(i) {
+  const text = document.getElementById('body-' + i).innerText;
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+}
+
+async function regenOne(i) {
+  const body = document.getElementById('body-' + i);
+  body.innerHTML = '<em style="color:var(--muted);font-size:13px;">Writing a new version...</em>';
+
+  const content  = getContent();
+  const hasImage = activeTab === 'image' && uploadedImageBase64;
+  // Temporarily force count to 1 for regen
+  const savedCount = selectedCount;
+  selectedCount = 1;
+  const prompt = buildPrompt(content).replace(/\[[\s\S]*?\]$/, '{"variant":1,"tweet":"..."}');
+  selectedCount = savedCount;
+
+  try {
+    let messages;
+    if (hasImage) {
+      const b64  = uploadedImageBase64.split(',')[1];
+      const mime = uploadedImageBase64.split(';')[0].split(':')[1];
+      messages = [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: mime, data: b64 } },
+        { type: 'text',  text: prompt }
+      ]}];
+    } else {
+      messages = [{ role: 'user', content: prompt }];
+    }
+    const resp   = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 400, messages })
+    });
+    const data   = await resp.json();
+    const raw    = data.content?.map(b => b.text || '').join('') || '';
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    body.innerText = parsed.tweet || (Array.isArray(parsed) ? parsed[0]?.tweet : '') || '';
+    recount(i);
+  } catch(e) {
+    body.innerText = 'Regeneration failed — please try again.';
+  }
+}
+</script>
+</body>
+</html>
