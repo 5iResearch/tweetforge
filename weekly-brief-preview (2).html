@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5i Research — Canadian Market Weekly Brief</title>
+  <meta name="keywords" content="Canadian stock market March 2026, NVDA earnings impact Canada, TSX energy sector allocation, Thomson Reuters AI recovery, Canadian bank stocks Q1 2026, Topicus earnings analysis, Canadian tech stocks rebound, 5i Research weekly brief" />
+  <style>
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f7fa; font-family: Georgia, serif; color: #363636; min-height: 100vh; }
+    .brief-shell { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
+    .header { background: linear-gradient(135deg, #0d1b2a 0%, #1a3057 100%); border-bottom: 3px solid #C67A29; padding: 28px 32px 22px; position: relative; overflow: hidden; border-radius: 12px 12px 0 0; }
+    .header::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(198,122,41,0.05) 40px, rgba(198,122,41,0.05) 41px); pointer-events: none; }
+    .header-tag { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .header-logo { color: #C67A29; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; font-weight: 700; }
+    .header-divider { color: rgba(255,255,255,0.2); font-size: 14px; }
+    .header-title-sub { color: rgba(255,255,255,0.5); font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; }
+    h1 { font-size: clamp(18px, 3.5vw, 28px); font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
+    .header-sub { color: #a0b4cc; font-size: 12px; font-family: 'Courier New', monospace; margin-top: 5px; }
+    .content { background: #ffffff; border: 1px solid #dde4ef; border-top: none; border-radius: 0 0 12px 12px; padding: 28px 32px; }
+    .hook { background: #f0f5ff; border: 1px solid #c8d8ef; border-left: 4px solid #C67A29; border-radius: 6px; padding: 20px 24px; margin-bottom: 18px; }
+    .hook-date { font-size: 10px; color: #C67A29; font-family: 'Courier New', monospace; letter-spacing: 2px; margin-bottom: 8px; display: block; font-weight: 700; }
+    .hook p { font-size: clamp(15px, 2.5vw, 18px); color: #0d1b2a; font-style: italic; line-height: 1.4; font-weight: 600; }
+    .themes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+    .theme-tag { background: #e8f0fb; border: 1px solid #b8cce4; color: #1F79BE; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-family: 'Courier New', monospace; font-weight: 600; }
+    .section-label { font-size: 11px; color: #4B8EA9; letter-spacing: 3px; text-transform: uppercase; font-family: 'Courier New', monospace; margin-bottom: 12px; font-weight: 700; }
+    .insight { background: #f8faff; border: 1px solid #dde4ef; border-left: 3px solid #1F79BE; border-radius: 4px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 10px; }
+    .insight-icon { font-size: 22px; flex-shrink: 0; }
+    .insight-title { font-weight: 700; color: #0d1b2a; margin-bottom: 4px; font-size: 15px; }
+    .insight-summary { color: #4a5568; font-size: 13px; line-height: 1.6; }
+    .card { background: #f8faff; border: 1px solid #dde4ef; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .badge { background: #e8f0fb; color: #1F79BE; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-family: 'Courier New', monospace; font-weight: 700; border: 1px solid #b8cce4; }
+    .question-box { background: #ffffff; border: 1px solid #dde4ef; border-left: 3px solid #C67A29; border-radius: 4px; padding: 14px 16px; margin-bottom: 12px; color: #0d1b2a; font-size: 15px; font-style: italic; line-height: 1.5; }
+    .answer { color: #4a5568; font-size: 14px; line-height: 1.7; }
+    .sentiment-badge { padding: 3px 12px; border-radius: 12px; font-size: 11px; font-family: 'Courier New', monospace; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
+    .trend-headline { font-weight: 700; color: #0d1b2a; font-size: 17px; margin-bottom: 10px; }
+    .kw-section { margin-bottom: 20px; }
+    .kw-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .kw-tag { background: #ffffff; border: 1px solid #dde4ef; color: #4B8EA9; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-family: 'Courier New', monospace; }
+    .footer { text-align: center; padding: 28px 32px; color: #8a9bb5; font-size: 12px; font-family: 'Courier New', monospace; border-top: 1px solid #dde4ef; margin-top: 8px; }
+    @media (max-width: 600px) { .content, .header { padding-left: 18px; padding-right: 18px; } }
+
+    .blog-shell { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+    .blog-meta { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+    .blog-tag { background: #e8f0fb; color: #1F79BE; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-family: 'Courier New', monospace; letter-spacing: 2px; text-transform: uppercase; border: 1px solid #b8cce4; font-weight: 700; }
+    .blog-title { font-size: clamp(22px, 4vw, 38px); font-weight: 700; color: #0d1b2a; line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 14px; }
+    .blog-subtitle { color: #4a5568; font-size: 16px; line-height: 1.6; margin-bottom: 32px; border-left: 4px solid #C67A29; padding-left: 16px; font-style: italic; }
+    .divider { border: none; border-top: 1px solid #dde4ef; margin: 28px 0; }
+    .intro-copy { color: #4a5568; font-size: 15px; line-height: 1.8; margin-bottom: 32px; }
+    .intro-copy strong { color: #0d1b2a; }
+    .brief-preview-wrap { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid #dde4ef; box-shadow: 0 4px 24px rgba(31,121,190,0.08); }
+    .brief-visible { background: #ffffff; padding: 28px 32px; }
+    .fade-zone { background: #ffffff; padding: 0 32px; }
+    .insight-fading { background: #f8faff; border: 1px solid #dde4ef; border-left: 3px solid #1F79BE; border-radius: 4px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; -webkit-mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 85%); mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 85%); }
+    .blur-gate { position: relative; background: #ffffff; overflow: hidden; min-height: 300px; }
+    .blurred-content { padding: 24px 32px 28px; filter: blur(7px); opacity: 0.4; pointer-events: none; user-select: none; }
+    .ghost-card { background: #f8faff; border: 1px solid #dde4ef; border-radius: 8px; padding: 20px 22px; margin-bottom: 16px; }
+    .ghost-line { height: 12px; border-radius: 6px; background: #dde4ef; margin-bottom: 10px; }
+    .gate-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(to bottom, rgba(245,247,250,0) 0%, rgba(245,247,250,0.7) 25%, rgba(245,247,250,0.96) 55%, rgba(245,247,250,1) 100%); padding: 32px 24px; text-align: center; }
+    .gate-lock { font-size: 36px; margin-bottom: 14px; }
+    .gate-headline { font-size: clamp(18px, 3vw, 24px); font-weight: 700; color: #0d1b2a; margin-bottom: 8px; }
+    .gate-sub { color: #4a5568; font-size: 14px; margin-bottom: 20px; line-height: 1.6; max-width: 400px; }
+    .inside-list { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+    .inside-chip { background: #e8f0fb; border: 1px solid #b8cce4; color: #1F79BE; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-family: 'Courier New', monospace; font-weight: 600; }
+    .gate-btn { background: #C67A29; color: #ffffff; border: none; padding: 14px 36px; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Courier New', monospace; letter-spacing: 0.5px; text-decoration: none; display: inline-block; transition: transform 0.15s, box-shadow 0.15s; }
+    .gate-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(198,122,41,0.35); background: #b36a20; }
+    .gate-note { color: #8a9bb5; font-size: 11px; font-family: 'Courier New', monospace; margin-top: 14px; letter-spacing: 0.5px; }
+    .member-perks { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px; padding: 18px 24px; background: #f0f5ff; border-top: 1px solid #dde4ef; }
+    .perk-chip { background: #ffffff; border: 1px solid #b8cce4; color: #363636; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-family: 'Courier New', monospace; }
+    .blog-footer-copy { margin-top: 48px; padding-top: 28px; border-top: 1px solid #dde4ef; color: #8a9bb5; font-size: 13px; font-family: 'Courier New', monospace; text-align: center; line-height: 1.8; }
+    .blog-footer-copy a { color: #1F79BE; text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="blog-shell">
+  <div class="blog-meta">
+    <span class="blog-tag">Weekly Brief</span>
+    <span class="blog-tag" style="background:#eafbf0; color:#44A660; border-color:#b8e4ca;">Free Preview</span>
+  </div>
+  <h1 class="blog-title">Canadian software stocks rebound as AI fears ease; energy sector hits new highs</h1>
+  <p class="blog-subtitle">A preview of this week's Canadian Market Weekly Brief from 5i Research.</p>
+  <p class="intro-copy">Each week our <strong>Weekly Brief</strong> distills the most important market movements, earnings surprises, and investor questions into one clean read — curated from real Q&amp;A with our research team. Below is a preview. <strong>Members get the full brief</strong> including featured Q&amp;A, market trend analysis, and the complete insight breakdown every week.</p>
+  <hr class="divider" />
+  <div class="brief-preview-wrap">
+    <div class="header" style="border-radius:0;">
+      <div class="header-tag">
+        <span class="header-logo">🍁 5i Research</span>
+        <span class="header-divider">|</span>
+        <span class="header-title-sub">Canadian Market Weekly Brief</span>
+      </div>
+      <h1>Canadian Market Weekly Brief</h1>
+      <p class="header-sub">Q&amp;A driven · Investor-ready</p>
+    </div>
+    <div class="brief-visible">
+      <div class="hook">
+        <span class="hook-date">WEEKLY BRIEF</span>
+        <p>"Canadian software stocks rebound as AI fears ease; energy sector hits new highs"</p>
+      </div>
+      <div class="themes"><span class="theme-tag">#AIDisruptionFearsEasing</span><span class="theme-tag">#EnergySectorRebalancing</span><span class="theme-tag">#SoftwareStockRecovery</span><span class="theme-tag">#DefensiveRotationPlay</span></div>
+      <p class="section-label">📊 Top Insights This Week</p>
+      
+      <div class="insight">
+        <span class="insight-icon">📈</span>
+        <div>
+          <div class="insight-title">NVDA Earnings Beat Sparks Tech Relief</div>
+          <div class="insight-summary">Nvidia's Q4 EPS of $1.30 beat estimates by 4% with revenue of $68B vs $66B expected, driving a 17-upvote discussion. Guidance raised to $78B for Q1, supporting Canadian tech names like CLS and SHOP as AI infrastructure spending continues.</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="fade-zone">
+      <div class="insight-fading">
+        <span class="insight-icon">🛢️</span>
+        <div>
+          <div class="insight-title">Energy Sector Gains Momentum Despite Oil Volatility</div>
+          <div class="insight-summary">Canadian energy names like TOU, ARX, and CNQ are breaking to all-time highs even with oil below peaks, driven by debt paydowns and buybacks. TSX energy weighting at 16.44% prompts rebalancing discussions, with 10-12% suggested as optimal allocation.</div>
+        </div>
+      </div>
+    </div>
+    <div class="blur-gate">
+      <div class="blurred-content">
+        <div class="ghost-card">
+          <div class="ghost-line" style="width:40%; background:#b8cce4;"></div>
+          <div class="ghost-line" style="width:100%;"></div>
+          <div class="ghost-line" style="width:80%;"></div>
+          <div class="ghost-line" style="width:60%;"></div>
+        </div>
+        <div class="ghost-card">
+          <div style="display:flex; gap:10px; margin-bottom:12px;">
+            <div class="ghost-line" style="width:30%; height:14px;"></div>
+            <div class="ghost-line" style="width:20%; height:14px;"></div>
+          </div>
+          <div class="ghost-line" style="width:100%;"></div>
+          <div class="ghost-line" style="width:100%;"></div>
+          <div class="ghost-line" style="width:75%;"></div>
+          <div class="ghost-line" style="width:55%;"></div>
+        </div>
+        <div class="ghost-card">
+          <div class="ghost-line" style="width:28%; background:#b8cce4;"></div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <div class="ghost-line" style="width:22%; height:24px; border-radius:4px;"></div>
+            <div class="ghost-line" style="width:22%; height:24px; border-radius:4px;"></div>
+            <div class="ghost-line" style="width:22%; height:24px; border-radius:4px;"></div>
+            <div class="ghost-line" style="width:22%; height:24px; border-radius:4px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="gate-overlay">
+        <div class="inside-list">
+          <span class="inside-chip">⚡ 2 More Insights</span>
+          <span class="inside-chip">💬 Featured Q&amp;A</span>
+          <span class="inside-chip">📈 Market Trend Breakdown</span>
+        </div>
+        <div class="gate-lock">🔒</div>
+        <h3 class="gate-headline">Read the Full Weekly Brief</h3>
+        <p class="gate-sub">Start your <strong>14-day free trial</strong> — no credit card required. Get the complete brief plus full access to 5i Research membership.</p>
+        <a href="https://www.5iresearch.ca/index.php?p=qt_redeem_code.NewAccount&code=weeklybrief" target="_blank" class="gate-btn">START 14-DAY FREE TRIAL →</a>
+        <p class="gate-note">✓ Cancel anytime &nbsp;·&nbsp; ✓ No credit card required &nbsp;·&nbsp; ✓ Full brief every week</p>
+      </div>
+    </div>
+    <div class="member-perks">
+      <span class="perk-chip">📊 3 Model Portfolios</span>
+      <span class="perk-chip">💬 Thousands of Q&amp;A</span>
+      <span class="perk-chip">📋 Research Reports</span>
+      <span class="perk-chip">📰 Market Updates</span>
+      <span class="perk-chip">🍁 Weekly Brief</span>
+    </div>
+  </div>
+  <div class="blog-footer-copy">
+    Canadian Market Weekly Brief · 5i Research · <a href="#">About our research</a>
+  </div>
+</div>
+</body>
+</html>
