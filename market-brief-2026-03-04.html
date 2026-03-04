@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canadian Market Weekly Brief – Mar 4, 2026</title>
+  <meta name="keywords" content="Canadian stock market, TSX investing, NVIDIA earnings, Topicus TOI, Canadian energy stocks, AI infrastructure stocks, Constellation Software CSU, Canadian tech stocks, defense stocks Canada, portfolio diversification Canada" />
+  <meta name="description" content="Canadian tech rebounds as AI fears ease; energy sector hits new highs. Weekly TSX market brief for retail investors." />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0e1a; font-family: Georgia, serif; color: #e8e2d4; min-height: 100vh; }
+
+    .header {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a2744 50%, #0d1b2a 100%);
+      border-bottom: 2px solid #c8993a;
+      padding: 32px 40px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(200,153,58,0.03) 40px, rgba(200,153,58,0.03) 41px);
+      pointer-events: none;
+    }
+    .header-tag { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .header-tag span { color: #c8993a; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; }
+    h1 { font-size: clamp(22px, 4vw, 36px); font-weight: 700; color: #f5edd8; letter-spacing: -0.5px; line-height: 1.1; }
+    .header-sub { color: #8a9bb5; font-size: 13px; font-family: 'Courier New', monospace; margin-top: 6px; }
+
+    .content { max-width: 860px; margin: 0 auto; padding: 32px 24px; }
+
+    .hook {
+      background: linear-gradient(135deg, #1a2744, #0d1b2a);
+      border: 2px solid #c8993a;
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .hook-date {
+      position: absolute; top: 12px; right: 16px;
+      font-size: 11px; color: #c8993a;
+      font-family: 'Courier New', monospace; letter-spacing: 2px;
+    }
+    .hook p { font-size: clamp(16px, 2.5vw, 20px); color: #f5edd8; font-style: italic; line-height: 1.4; }
+
+    .themes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .theme-tag {
+      background: #1a2744; border: 1px solid #2a3d5e; color: #c8993a;
+      padding: 4px 12px; border-radius: 20px; font-size: 12px;
+      font-family: 'Courier New', monospace; letter-spacing: 0.5px;
+    }
+
+    .section-label {
+      font-size: 11px; color: #8a9bb5; letter-spacing: 3px;
+      text-transform: uppercase; font-family: 'Courier New', monospace; margin-bottom: 14px;
+    }
+
+    .insights { display: grid; gap: 12px; margin-bottom: 20px; }
+    .insight {
+      background: #111827; border: 1px solid #1e2d45;
+      border-left: 3px solid #c8993a; border-radius: 4px;
+      padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start;
+    }
+    .insight-icon { font-size: 22px; flex-shrink: 0; }
+    .insight-title { font-weight: 700; color: #f5edd8; margin-bottom: 4px; font-size: 15px; }
+    .insight-summary { color: #a0aec0; font-size: 13px; line-height: 1.6; }
+
+    .card {
+      background: #111827; border: 1px solid #1e2d45;
+      border-radius: 8px; padding: 24px; margin-bottom: 20px;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+    .badge {
+      background: #1a2744; color: #c8993a; padding: 3px 10px;
+      border-radius: 12px; font-size: 12px; font-family: 'Courier New', monospace;
+    }
+    .question-box {
+      background: #0d1b2a; border: 1px solid #1e2d45; border-radius: 4px;
+      padding: 14px 16px; margin-bottom: 12px;
+      color: #f5edd8; font-size: 15px; font-style: italic; line-height: 1.5;
+    }
+    .answer { color: #a0aec0; font-size: 14px; line-height: 1.7; }
+
+    .sentiment-badge {
+      background: #00c57a20; color: #00c57a; border: 1px solid #00c57a40;
+      padding: 3px 12px; border-radius: 12px; font-size: 11px;
+      font-family: 'Courier New', monospace; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .trend-headline { font-weight: 700; color: #f5edd8; font-size: 17px; margin-bottom: 10px; }
+
+    .seo-card {
+      background: #111827; border: 1px dashed #1e2d45;
+      border-radius: 8px; padding: 18px 24px;
+    }
+    .kw-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .kw-tag {
+      background: #0d1b2a; border: 1px solid #1e2d45; color: #a0aec0;
+      padding: 4px 10px; border-radius: 4px; font-size: 12px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .footer {
+      text-align: center; padding: 32px;
+      color: #4a5568; font-size: 12px; font-family: 'Courier New', monospace;
+      border-top: 1px solid #1e2d45; margin-top: 32px;
+    }
+
+    @media (max-width: 600px) {
+      .header { padding: 24px 20px 18px; }
+      .content { padding: 20px 16px; }
+      .hook-date { position: static; margin-bottom: 10px; display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-tag">
+      <span style="font-size:28px">🍁</span>
+      <span>Powered by AI</span>
+    </div>
+    <h1>Canadian Market Weekly Brief</h1>
+    <p class="header-sub">SEO-optimized · Q&A driven · Investor-ready</p>
+  </div>
+
+  <div class="content">
+
+    <!-- Hook -->
+    <div class="hook">
+      <span class="hook-date">WEEK OF MAR 4, 2026</span>
+      <p>"Canadian tech rebounds as AI fears ease; energy sector hits new highs"</p>
+    </div>
+
+    <!-- Trending Themes -->
+    <div class="themes">
+      <span class="theme-tag">#AIInfrastructureGrowth</span>
+      <span class="theme-tag">#SoftwareSectorStabilization</span>
+      <span class="theme-tag">#EnergySectorMomentum</span>
+      <span class="theme-tag">#DefenseSpendingBeneficiaries</span>
+    </div>
+
+    <!-- Top Insights -->
+    <p class="section-label">📊 Top Insights This Week</p>
+    <div class="insights">
+      <div class="insight">
+        <span class="insight-icon">🎯</span>
+        <div>
+          <div class="insight-title">NVDA Beats Expectations</div>
+          <div class="insight-summary">NVIDIA reported Q4 EPS of $1.30 vs $1.25 expected, with revenues of $68B beating estimates of $66B. The company raised Q1 guidance to $78B revenue (vs $77B expected) and EPS of $1.62 (vs $1.55), reinforcing AI infrastructure momentum at 23X forward earnings.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-icon">📊</span>
+        <div>
+          <div class="insight-title">Topicus Growth Remains Solid</div>
+          <div class="insight-summary">TOI delivered €0.53 EPS vs €0.52 expected with 20% revenue growth and 4% organic growth. Free cash flow surged 40% and net income jumped 41%, with €390M in acquisitions demonstrating continued M&A execution despite AI-related investor concerns.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <span class="insight-icon">⚡</span>
+        <div>
+          <div class="insight-title">Canadian Energy Outperforms</div>
+          <div class="insight-summary">Energy stocks are breaking to all-time highs even with oil below peak levels, driven by debt paydowns, dividend increases, and buybacks. TSX energy weighting at 16.44% suggests trimming to 10-12% range for better portfolio balance despite strong momentum.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Q&A -->
+    <div class="card">
+      <div class="card-header">
+        <p class="section-label" style="margin:0">💬 Featured Q&A</p>
+        <span class="badge">▲ 17 upvotes</span>
+      </div>
+      <div class="question-box">"I have small 'starter' positions in these stocks, all still in the black with the exception of smallish losses in GLXY and KTOS. Most are in non-registered accounts. I have some spare cash and would like to increase position sizes. Are there any that you would add to at this time or would you continue to keep your powder dry for now? Also, are there any that you feel should be let go?"</div>
+      <p class="answer">We would be very comfortable adding to AXON, CLS, and PNG today. We like all of the others but would be more inclined to hold than add. Among Canadian growth names, PNG stands out for defense spending tailwinds while CLS benefits from AI infrastructure buildout...</p>
+    </div>
+
+    <!-- Market Trend -->
+    <div class="card">
+      <div class="card-header">
+        <p class="section-label" style="margin:0">📈 Market Trend Highlight</p>
+        <span class="sentiment-badge">bullish</span>
+      </div>
+      <div class="trend-headline">TSX Broadening Out as Tech Stabilizes</div>
+      <p class="answer">The Canadian market is seeing a notable broadening with industrials, financials, and energy leading gains while software fears ease. The TSX energy sector at 16.44% weighting presents trimming opportunities as valuations remain low despite strong performance. Meanwhile, Canadian software names like TOI and CSU are finding support as investors differentiate between vulnerable SaaS models and sticky, mission-critical platforms. With the BoC likely to continue rate normalization, utilities and financials could see further upside while maintaining exposure to AI infrastructure plays like CLS remains strategic.</p>
+    </div>
+
+    <!-- SEO Keywords -->
+    <div class="seo-card">
+      <p class="section-label">🔍 SEO Keywords</p>
+      <div class="kw-tags">
+        <span class="kw-tag">Canadian stock market</span>
+        <span class="kw-tag">TSX investing</span>
+        <span class="kw-tag">NVIDIA earnings</span>
+        <span class="kw-tag">Topicus TOI</span>
+        <span class="kw-tag">Canadian energy stocks</span>
+        <span class="kw-tag">AI infrastructure stocks</span>
+        <span class="kw-tag">Constellation Software CSU</span>
+        <span class="kw-tag">Canadian tech stocks</span>
+        <span class="kw-tag">defense stocks Canada</span>
+        <span class="kw-tag">portfolio diversification Canada</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      Canadian Market Weekly Brief · Week of Mar 4, 2026 · Generated with AI
+    </div>
+
+  </div>
+</body>
+</html>
